@@ -19,7 +19,7 @@
 ## Result
 
 ```python
-python run.py
+>> python run.py
 iter 10: 19.061546
 iter 20: 19.114918
 iter 30: 19.287617

@@ -12,7 +12,7 @@
 
 #### i. (1-$p_{drop}$)만큼 값을 키워줘야 한다. $\gamma = \frac{1}{1-p_{drop}}$
 <img src="https://latex.codecogs.com/gif.latex?(1-$p_{drop}$) \text{만큼 값을 키워줘야 한다.} $\gamma = \frac{1}{1-p_{drop}}$ " /> 
-<img src="https://render.githubusercontent.com/render/math?math=(1-p_{drop}) \text{만큼 값을 키워줘야 한다.} \gamma = \frac{1}{1-p_{drop}}">
+<img src="https://render.githubusercontent.com/render/math?math=(1-p_{drop}) 만큼 값을 키워줘야 한다. \gamma = \frac{1}{1-p_{drop}}">
 
 #### ii. Training때 다양한 노드가 생성된 Neural Network로 학습하고 test때 이를 모두 융합해줌으로써 일종의 ensemble효과를 줄 수 있다.
 

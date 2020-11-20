@@ -1,0 +1,61 @@
+1.(a).i
+과거에 이동한 방향을 기억하여, 그 방향 일부를 추가하여 이동함
+low variance가 아니고 high variance면 발산?
+
+1.(a).ii
+업데이트를 할수록 학습률을 낮춰서 더 잘 학습할수 있게끔 한다
+
+1.(b).i ???
+γ
+
+1.(b).ii
+dropout은 너무 잘 학습되는 것을 막기위함이다.evaluation은 학습시키는 과정이 아니므로 사용할 필요가 없다.
+
+2.(a)
+Stack | Buffer | New depondency | Transition
+[ROOT] | [I, parsed, this, sentence, correctly] | . | Initial Config
+[ROOT, I] | [parsed, this, sentence, correctly] | . | SHIFT
+[ROOT, I, parsed] | [this, sentence, correctly] | . | SHIFT
+[ROOT, parsed] | [this, sentence, correctly] | parsed -> I | LEFT-ARC
+[ROOT, parsed, this] | [sentence, correctly] | . | SHIFT
+[ROOT, parsed, this, sentence] | [correctly] | . | SHIFT
+[ROOT, parsed, sentence] | [correctly] | sentence -> this | LEFT-ARC
+[ROOT, parsed] | [correctly] | parsed -> sentence | RIGHT-ARC
+[ROOT, parsed, correctly] | [] | . | SHIFT
+[ROOT, parsed] | [] | parsed -> correctly | RIGHT-ARC
+[ROOT] | [] | ROOT -> parsed | RIGHT-ARC
+
+2.(b)
+버퍼에서 스택으로 가야하니까 SHIFT n단어를 옮기는데 n step 필요
+스택에서 ARC 발생해서 사라지는거 n단어 => n step 필요
+=> 2n step
+
+2.(f)
+- Prepositional phrase attachment err : P
+전치사구가 이상한것을 꾸며준다
+- verb phrase attachment err : V
+동사구가 엉뚱한것을 꾸며준다
+- modifier attachment err : M
+부사가 엉뚱한것을 꾸며준다
+- coordination attachment err : C
+접속사로 연결된 것들은 앞말이 뒷말을 향해야함
+
+2.(f).i
+- verb phrase attachment err
+- wedding -> fearing
+- heading -> fearing
+
+2.(f).ii
+- coordination attachment err
+- rescue -> and
+- rescue -> rush
+
+2.(f).iii
+- Prepositional phrase attachment err
+- named -> midland
+- guy -> midland
+
+2.(f).iv
+- modifier attachment err
+- elements -> most
+- crucial -> most

@@ -47,8 +47,8 @@ Stack | Buffer | New depondency | Transition
 
 2.(f).ii
 - coordination attachment err
-- rescue -> and
-- rescue -> rush
+- makes -> rescue
+- rush -> rescue
 
 2.(f).iii
 - Prepositional phrase attachment err

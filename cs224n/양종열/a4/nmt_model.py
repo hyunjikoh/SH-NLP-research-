@@ -173,7 +173,7 @@ class NMT(nn.Module):
         ### 1
         src_len, b = source_padded.shape
         h = self.hidden_size
-        X = self.model_embeddings.source(source_padded)
+        X = self.model_embeddings.source(source_padded)  # (src_len, b, e)
         assert X.shape == (src_len, b, self.model_embeddings.embed_size)
 
         ### 2
@@ -185,15 +185,19 @@ class NMT(nn.Module):
         # Returns
         #   Tuple of Tensor containing the padded sequence, and a Tensor containing the list of lengths of each sequence in the batch. 
         #   Batch elements will be re-ordered as they were ordered originally when the batch was passed to pack_padded_sequence or pack_sequence.
+        enc_hiddens, _enc_hiddens_lengths = pad_packed_sequence(enc_hiddens)
         #   (src_len, b, 2*h) -> (b, src_len, 2*h)
-        enc_hiddens = pad_packed_sequence(enc_hiddens)[0].permute(1,0,2)
+        enc_hiddens = enc_hiddens.permute(1,0,2)
         assert enc_hiddens.shape == (b, src_len, h*2)
+        assert last_hidden.shape == (b, h*2)
+        assert last_cell.shape == (b, h*2)
 
         ### 3
         # (2, b, h) -> (b, 2*h)
         last_hidden = torch.cat([last_hidden[0], last_hidden[1]], dim=1)
-        init_decoder_hidden = self.h_projection(last_hidden)
         last_cell = torch.cat([last_cell[0], last_cell[1]], dim=1)
+        
+        init_decoder_hidden = self.h_projection(last_hidden)
         init_decoder_cell = self.c_projection(last_cell)
         dec_init_state = (init_decoder_hidden, init_decoder_cell)
 

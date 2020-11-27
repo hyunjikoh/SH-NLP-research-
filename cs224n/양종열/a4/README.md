@@ -4,7 +4,7 @@
 
 ### (g) mask
 
-mask를 1로 지정하면 attention distribution 값을 -inf로 설정해준다. -inf로 설정된 값들은 softmax 계산시 0으로 설정되고 attention distribution이 0으로 설정되면 그 값들은 value값을 가져오지 않는다. attention에 mask를 씌워주는 것은 encoder에서는 필요하지 않고 decoder 단에서 사용하게 된다. decoder에서는 문장을 순서대로 생성하기 때문에 학습시에 현재 t 이후에 들어온 입력값을 모델에 넣어주지 않기 위해 필요하다.
+mask를 1로 지정하면 attention distribution 값을 -inf로 설정해준다. -inf로 설정된 값들은 softmax 계산시 0으로 설정되고 attention distribution이 0으로 설정되면 그 값들은 value값을 가져오지 않는다. attention에 mask를 씌워주는 것은 실제 입력 단어가 없는 값(padding된 값)으로부터 값을 가져오지 않기 위함이다.
 
 ### (i) run test
 
@@ -30,6 +30,17 @@ Corpus BLEU: 22.68303981369953
   - Disadvantage: 연산이 오래 걸리고 학습하는데에 시간이 오래 걸린다.
 
 ## 2. Analyzing NMT Systems
+
+### (a) check test results
+
+- i. Here's -> So, favorite -> one
+- ii.
+- iii. \<unk\> -> Bolingbroke
+- v. women's room -> teachers' lounge
+- vi.
+  - 100,000 -> 250,000
+
+### (b) Fine error
 
 ### (c) BLEU score
 

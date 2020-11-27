@@ -196,7 +196,7 @@ class NMT(nn.Module):
         # (2, b, h) -> (b, 2*h)
         last_hidden = torch.cat([last_hidden[0], last_hidden[1]], dim=1)
         last_cell = torch.cat([last_cell[0], last_cell[1]], dim=1)
-        
+
         init_decoder_hidden = self.h_projection(last_hidden)
         init_decoder_cell = self.c_projection(last_cell)
         dec_init_state = (init_decoder_hidden, init_decoder_cell)
@@ -358,7 +358,7 @@ class NMT(nn.Module):
         dec_state = self.decoder(Ybar_t, dec_state)
 
         ### 2
-        dec_hidden, dec_cell = dec_state
+        dec_hidden, _dec_cell = dec_state
 
         ### 3
         e_t = torch.bmm(enc_hiddens_proj, dec_hidden.unsqueeze(dim=2))  # (b, src_len, h) x (b, h, 1) = (b, src_len, 1)
@@ -399,23 +399,24 @@ class NMT(nn.Module):
         ###     Tanh:
         ###         https://pytorch.org/docs/stable/torch.html#torch.tanh
 
-        ### 1
+        ### 1. Apply softmax to e_t to yield alpha_t
         alpha_t = F.softmax(e_t, dim=1)
         assert alpha_t.shape == (b, src_len)
 
-        ### 2
+        ### 2. Use batched matrix multiplication between alpha_t and enc_hiddens to obtain the
+        ###    attention output vector, a_t.
         a_t = torch.bmm(alpha_t.unsqueeze(dim=1), enc_hiddens)  # (b, 1, src_len) x (b, src_len, 2h) x  = (b, 1, 2h)
-        a_t = a_t.squeeze(dim=1)
+        a_t = a_t.squeeze(dim=1)  # (b, 2h)
         assert a_t.shape == (b, 2*h)
 
-        ### 3
+        ### 3. Concatenate dec_hidden with a_t to compute tensor U_t
         U_t = torch.cat([dec_hidden, a_t], dim=1)
         assert U_t.shape == (b, 3*h), print(U_t.shape, (b, 3*h))
 
-        ### 4
+        ### 4. Apply the combined output projection layer to U_t to compute tensor V_t
         V_t = self.combined_output_projection(U_t)
 
-        ### 5
+        ### 5. Compute tensor O_t by first applying the Tanh function and then the dropout layer.
         O_t = self.dropout(nn.Tanh()(V_t))
 
         ### END YOUR CODE

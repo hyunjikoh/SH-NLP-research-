@@ -45,24 +45,24 @@ Coordination Attachment Error
 
 i.
 
-- Error Type: Modifier Attachment Error
+- Error Type: Verb Phrase Attachment Error
 - Incorrect dependency: wedding -> fearing
 - Correct dependency: heading -> fearing
 
 ii.
 
-- Error Type: Verb Phrase Attachment Error
+- Error Type: Coordination Attachment Error
 - Incorrect dependency: makes -> rescue
-- Correct dependency: want -> rescue
+- Correct dependency: rush -> rescue
 
 iii.
 
-- Error Type: Coordination Attachment Error
+- Error Type: Prepositional Phrase Attachment Error
 - Incorrect dependency: named -> Midland
-- Correct dependency: Joe -> Midland
+- Correct dependency: guy -> Midland
 
 iv.
 
-- Error Type: Prepositional Phrase Attachment Error
-- Incorrect dependency: success -> software
-- Correct dependency: elements -> software
+- Error Type: Modifier Attachment Error
+- Incorrect dependency: elements -> most
+- Correct dependency: crucial -> most

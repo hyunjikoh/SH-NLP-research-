@@ -43,7 +43,7 @@ class ModelEmbeddings(nn.Module):
 
         pad_token_idx = vocab.char2id['<pad>']
         self.embed_char_size = 50  # $$ e_{char} $$
-        self.embed_size = embed_size
+        self.embed_size = embed_size  # 256 $$ e_{word} $$
 
         self.char_embed = nn.Embedding(num_embeddings=len(vocab.char2id),
                                        embedding_dim=self.embed_char_size,
@@ -51,7 +51,7 @@ class ModelEmbeddings(nn.Module):
         self.cnn = CNN(in_channels=self.embed_char_size,
                        out_channels=self.embed_size)
         self.highway = Highway(size=self.embed_size)
-        self.dropout = nn.Dropout(p=0.3) 
+        self.dropout = nn.Dropout(p=0.3)
 
         ### END YOUR CODE
 
@@ -70,22 +70,35 @@ class ModelEmbeddings(nn.Module):
         ## End A4 code
 
         ### YOUR CODE HERE for part 1j
-        # 1. Record dimentions
-        src_len, b, _ = input.shape
+        # 1. Record dimensions
+        src_len, b, _e_char = input.shape
 
-        # 2. 
+        # 2. character embedding
+        # (src_len, b, m_word)
+        # -> (src_len, b, m_word, e_char) 
         emb = self.char_embed(input)
-        embed_reshaped = emb.reshape(emb.size(0) * emb.size(1), emb.size(2), emb.size(3)).\
-                             permute(0, 2, 1)  # (src_len*b, m_word, e_char) -> (src_len*b, e_char, m_word)
 
-        # 3.
+        # 3. reshape
+        # (src_len, b, m_word, e_char) 
+        # -> (src_len*b, m_word, e_char) 
+        # -> (src_len*b, e_char, m_word)
+        embed_reshaped = emb.reshape(emb.size(0) * emb.size(1), emb.size(2), emb.size(3)).\
+                             permute(0, 2, 1)
+
+        # 4. cnn 
+        # (src_len*b, e_char, m_word)
+        # -> (src_len*b, e_word)
         conv_out = self.cnn(embed_reshaped)
 
-        # 4.
+        # 5. highway & dropout
+        # (src_len*b, e_word)
+        # -> (src_len*b, e_word)
         highway = self.highway(conv_out)
         word_emb = self.dropout(highway)
 
-        # 5. (src_len*b, e_word) -> (src_len, b, e_word)
+        # 6. reshape
+        # (src_len*b, e_word)
+        # -> (src_len, b, e_word)
         output = word_emb.reshape(src_len, b, word_emb.size(1))
         
         return output

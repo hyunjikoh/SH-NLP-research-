@@ -12,29 +12,34 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class Highway(nn.Module):
-    """ Highway Network for Character-level Embedding
+    """ Character-level Embedding에서 사용하는 Highway Network
+    output = gate * h + (1-gate) * h
     """
 
     def __init__(self, size):
-        """ Init Highway Netowrk
+        """ Highway Netowrk 초기화
 
-        @param size (int): size if feature dimention of input/output
+        @param size (int): hidden layer의 input/output size
         """
         super(Highway, self).__init__()
         self.gate = nn.Linear(size, size)
         self.proj = nn.Linear(size, size)
     
     def forward(self, input: torch.Tensor) -> torch.Tensor:
-        """ Take a convolution output, compute highway network output
+        """ convolution에서 나온 출력값을 입력으로 받아 highway network 연산
 
         @param input (Tensor): convolution output (src_len * b, e_word)
 
         @return highway (Tensor): highway output (src_len * b, e_word)
 
         """
+        src_len_b, e_word = input.shape
         proj = F.relu(self.proj(input))
+        assert proj.shape == (src_len_b, e_word)
         gate = torch.sigmoid(self.gate(input))
+        assert gate.shape == (src_len_b, e_word)
         highway = gate * proj + (1 - gate) * input
+        assert highway.shape == (src_len_b, e_word)
         return highway
 
 ### END YOUR CODE 

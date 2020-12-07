@@ -128,17 +128,18 @@ def question_1i_sanity_check():
 
     SRC_LEN = 4
     B = 5
-    E_CHAR = 5
-    E_WORD = 10
-    M_WORD = 10
+    E_CHAR = 50
+    E_WORD = 256
+    M_WORD = 21
     K = 5
 
     input = torch.ones(B * SRC_LEN, E_CHAR, M_WORD)
 
-    cnn = CNN(in_channels=E_CHAR, out_channels=E_WORD)
+    cnn = CNN(in_channels=E_CHAR, out_channels=E_WORD, kernel_size=K)
     output = cnn(input)
-    assert output.shape[0] == SRC_LEN * \
-        B, "output shape is incorrect: it should be:\n {} but is: \n {}".format(
+    print(output.shape)
+    assert output.shape[0] == SRC_LEN * B, \
+            "output shape is incorrect: it should be:\n {} but is: \n {}".format(
             input.shape, output.shape)
     assert output.shape[1] == E_WORD, "Wrong embedding word size (channel dim)"
 

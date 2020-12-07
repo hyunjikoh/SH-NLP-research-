@@ -46,15 +46,15 @@ def pad_sents_char(sents, char_pad_token):
 
     for sent in sents:
         sent_padded = []
-        # padding characters to word
         for word in sent:
+            # 각 단어의 character 길이가 max word length보다 짧으면 padding
             if len(word) < max_word_length:
                 word += [char_pad_token] * (max_word_length - len(word))
-            else: # truncate
+            else: # 길면 truncated
                 word = word[:max_word_length]
             sent_padded.append(word)
         
-        # padding words(padded word) to sentence
+        # 각 문장의 단어를 max_word_length길이만큼 padding
         word_pads = [char_pad_token] * max_word_length
         sent_pads = [word_pads] * (max_sent_length - len(sent_padded))
         sent_padded += sent_pads

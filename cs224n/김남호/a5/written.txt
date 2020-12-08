@@ -1,0 +1,63 @@
+1.(a)
+word와 character로 표현할 수 있는 양의 차이때문에 임베딩 벡터 차원의 차이가 발생한다.
+character는 일단 알파벳만 봐도 26개일 정도로 갯수가 작다. 50차원정도만 이용하여도 캐릭터수준의 표현은 할수있다.
+1.(b)
+character-based embedding model의 파라미터 개수는 ??
+
+1.(c)
+character에서 conv가 rnn보다 좋은점
+rnn은 특정위치의 문자에 대해 좌,우 문자열들의 패턴같은것에 의해 해당 단어가 결정된다.
+cnn은 window내의 문자들을 통해서 특정단어를 결정한다.
+많은 filter를 통해 보다 다양한 feature를 발견할 수 있음
+
+1.(d)
+max pooling : 가장 큰 데이터를 가져오기때문에 해당 값이 대표성을 가지는지 의문이 듦, 계산할필요가 없어서 빠름
+average pooling : 데이터들의 가치를 최대한 반영할수있음, 계산을 해야함
+
+2.(f)
+load test source sentences from [./en_es_data/test.es]
+load test target sentences from [./en_es_data/test.en]
+load model from model.bin
+Decoding: 100% 8064/8064 [09:22<00:00, 14.34it/s]
+Corpus BLEU: 24.427575958594186
+
+3.(a)
+    "traducir": 5152,
+    "traducirlo": 35673,
+    "traducir.": 43517,
+    "traducirse": 48798,
+word-based는 traducir나 traducirse 같은 단어를 유사하다고 학습할수 없다.
+charater-aware nmt를 이용하면, traducir와 유사한 스펠링의 단어는 유사한 단어로 학습하게된다.
+
+3.(b).i
+financial - economic -> vertical
+neuron - nerve -> Nweton
+Francisco - san -> France
+naturally - occurring -> practically
+expectation - norms -> exception
+3.(b).ii
+3.(b).iii
+word2Vec 의미적인 유사성이 높음
+charCNN 스펠링 자체의 유사성이 높음
+3.(c)
+acceptable : <UNK>를 잘 번역한 예
+incorrect : <UNK>를 틀리게 번역한 예
+<acceptable> 인것같음
+1
+Puedo vestirme como agricultor, o con ropa de cuero, y nunca nadie ha elegido un agricultor.
+2
+You can have me as a farmer, or in leathers,  and no one has ever chose farmer.
+3
+I can <unk> like farmer, or with leather <unk> and no one has chosen a farmer.
+4
+I can dress myself as a farmer, or with leather clothes, and never had anybody picked up a farmer.
+
+<incorrect>
+1
+Bien, al da siguiente estbamos en Cleveland.
+2
+Well, the next day we were in Cleveland.
+3
+Well, the next day we were in <unk>
+4
+Well, the next day we were in Cloud.
